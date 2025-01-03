@@ -15,17 +15,16 @@ namespace LINQdotNET.Controller
             return Ok(employees);
         }
 
-        [HttpGet("/linq/query")]
+        [HttpGet("/linq/method")]
         public ActionResult<List<Employee>> GetEmployeesLinqQuery()
         {
             var employees = employeeService.GetAllEmployees();
 
-            // LINQ query syntax
-            var query = from employee in employees
-                where employee.Age > 30
-                orderby employee.Name
-                select employee;
-            
+            // LINQ method syntax
+            var query = employees
+                .Where(employee => employee.Age > 30)
+                .OrderBy(employee => employee.Name);
+
             // query is executed 
             foreach (var employee in employees)
             {
