@@ -14,15 +14,18 @@ namespace LINQdotNET.Controller
         [HttpGet]
         public ActionResult GetProductCategories()
         {
-            //  Display the 'ProductName', 'CategoryName' and 'Price' of all the products.
+            //  Display the category name and the total quantity of products available in each category in the ascending order of category Id
 
             var products = productService.GetAllProducts();
             var categories = categoryService.GetAllCategories();
 
             var query = from product in products
-                join category in categories
-                    on product.CategoryId equals category.CategoryId
-                select new { product.ProductName, category.CategoryName, product.Price };
+                group product by product.CategoryId
+                into g
+                join category in categories 
+                    on g.Key equals category.CategoryId
+                orderby g.Key ascending 
+                select new { CategoryName = category.CategoryName, Quantity = g.Sum(x => x.QuantityAvailable) };
 
             return Ok(query); // query is executed here, as Ok() serialize the data 
         }
