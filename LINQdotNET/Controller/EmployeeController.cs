@@ -15,17 +15,24 @@ namespace LINQdotNET.Controller
             return Ok(employees);
         }
 
-        [HttpGet("/linq/immediate")]
+        [HttpGet("/linq/deferred")]
         public ActionResult<List<Employee>> GetEmployeesLinqQuery()
         {
             var employees = employeeService.GetAllEmployees();
 
             // LINQ method syntax
-            var query = (employees
-                .Where(employee => employee.Age > 30)
-                .OrderBy(employee => employee.Name)).Count(); // query executes here
+            var query = from employee in employees
+                where employee.Age > 30
+                orderby employee.Name
+                select employee; // query not executed here
 
-            Console.WriteLine(query);
+
+            // query is executed here
+            foreach (var employee in query)
+            {
+                Console.WriteLine(employee);
+            }
+
             return Ok(query);
         }
     }
