@@ -14,14 +14,15 @@ namespace LINQdotNET.Controller
         [HttpGet]
         public ActionResult GetProductCategories()
         {
-            //  Display the 'CategoryId' and number of products available in each category. Here, we need to group the data with 'CategoryId'
+            //  Display the 'ProductName', 'CategoryName' and 'Price' of all the products.
 
             var products = productService.GetAllProducts();
+            var categories = categoryService.GetAllCategories();
 
             var query = from product in products
-                group product by product.CategoryId
-                into g
-                select new { CategoryId = g.Key, NumberOfProducts = g.Count() };
+                join category in categories
+                    on product.CategoryId equals category.CategoryId
+                select new { product.ProductName, category.CategoryName, product.Price };
 
             return Ok(query); // query is executed here, as Ok() serialize the data 
         }
