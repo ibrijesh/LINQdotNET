@@ -14,11 +14,12 @@ namespace LINQdotNET.Controller
         [HttpGet]
         public ActionResult GetProductCategories()
         {
-            // display the product names as well as price of all the products
+            // Display the product names as well as price of all those products which are priced above Rs. 1000
 
             var products = productService.GetAllProducts();
 
             var query = from product in products
+                where product.Price > 1000
                 select new { product.ProductName, product.Price };
 
             return Ok(query); // query is executed here, as Ok() serialize the data 
