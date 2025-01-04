@@ -14,16 +14,14 @@ namespace LINQdotNET.Controller
         [HttpGet]
         public ActionResult GetProductCategories()
         {
+            // display the product names of all the products
+
             var products = productService.GetAllProducts();
-            var categories = categoryService.GetAllCategories();
 
-            var result = new
-            {
-                Products = products,
-                Categories = categories
-            };
+            var query = from product in products
+                select product.ProductName;
 
-            return Ok(result);
+            return Ok(query); // query is executed here, as Ok() serialize the data 
         }
     }
 }
