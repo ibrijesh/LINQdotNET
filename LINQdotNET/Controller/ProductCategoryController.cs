@@ -14,14 +14,14 @@ namespace LINQdotNET.Controller
         [HttpGet]
         public ActionResult GetProductCategories()
         {
-            // Display the product names as well as price of all those products which are priced above Rs. 1000 in decreasing order of price
+            //  Display the 'CategoryId' and number of products available in each category. Here, we need to group the data with 'CategoryId'
 
             var products = productService.GetAllProducts();
 
             var query = from product in products
-                where product.Price > 1000
-                orderby product.Price descending
-                select new { product.ProductName, product.Price };
+                group product by product.CategoryId
+                into g
+                select new { CategoryId = g.Key, NumberOfProducts = g.Count() };
 
             return Ok(query); // query is executed here, as Ok() serialize the data 
         }
